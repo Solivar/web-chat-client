@@ -2,34 +2,31 @@
   "messages": [
     {
       "id": 1,
-      "userId": 1,
+      "name": "Ted Brown",
       "content": "Hello! How are you?",
       "createdAt": "2021-08-17T08:03:15.829Z"
     },
     {
       "id": 2,
-      "userId": 2,
+      "name": "Rick Terro",
       "content": "All good",
       "createdAt": "2021-08-17T08:03:21.829Z"
     },
     {
       "id": 3,
-      "userId": 3,
+      "name": "Jack Berg",
       "content": "Going to the movies",
       "createdAt": "2021-08-17T08:03:58.829Z"
     }
   ],
   "users": [
     {
-      "id": 1,
       "name": "Ted Brown"
     },
     {
-      "id": 2,
       "name": "Rick Terro"
     },
     {
-      "id": 3,
       "name": "Jack Berg"
     }
   ]
