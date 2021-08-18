@@ -4,7 +4,7 @@ import * as styles from './Name.module.scss';
 
 import { FaArrowRight } from 'react-icons/fa';
 
-const Name = () => {
+const Name = ({ updateName }) => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
@@ -19,7 +19,11 @@ const Name = () => {
 
     if (name.length < 1 || name.length > 25) {
       setError('Name must be 1 - 25 characters long');
+
+      return;
     }
+
+    updateName(name);
   };
 
   return (
