@@ -3,13 +3,13 @@ import ChatRoom from './views/ChatRoom';
 
 function App() {
   return (
-    <section className="section">
-      <div className="container">
-        <div className="box">
+    <div className="container is-max-widescreen is-full-height">
+      <section className="section is-full-height">
+        <div className="is-full-height App">
           <ChatRoom />
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 
