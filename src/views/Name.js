@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as styles from './Name.module.scss';
 
 import { FaArrowRight } from 'react-icons/fa';
 
-const Name = ({ updateName }) => {
+const Name = ({ socket, updateName }) => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    socket.on('join:exception', message => {
+      setError(message);
+    });
+
+    socket.on('join:response', message => {
+      updateName(message);
+    });
+  }, [socket, updateName]);
 
   const handleChange = e => {
     setError('');
@@ -18,12 +28,12 @@ const Name = ({ updateName }) => {
     setError('');
 
     if (name.length < 1 || name.length > 25) {
-      setError('Name must be 1 - 25 characters long');
+      setError('Name must be 1 - 25 characters long.');
 
       return;
     }
 
-    updateName(name);
+    socket.emit('join:set_name', name);
   };
 
   return (
