@@ -12,13 +12,14 @@ const ChatRoom = ({ socket }) => {
   const messages = data.messages;
 
   useEffect(() => {
-    console.log('firing');
     socket.emit('chat:get_user_list');
+  }, [socket]);
 
+  useEffect(() => {
     const receiveNewUser = userName => {
       setUsers(prevUsers => {
         const newUsers = [...prevUsers];
-        newUsers.push({ name: userName });
+        newUsers.push(userName);
 
         return newUsers;
       });
@@ -30,14 +31,29 @@ const ChatRoom = ({ socket }) => {
       setUsers(newUsers);
     };
 
+    const receiveDisconnectedUser = userName => {
+      setUsers(prevUsers => {
+        const newUsers = [...prevUsers];
+        const userIndex = newUsers.indexOf(userName);
+
+        console.log(prevUsers);
+
+        newUsers.splice(userIndex, 1);
+
+        return newUsers;
+      });
+    };
+
     socket.on('chat:user_list', receiveAllUsers);
     socket.on('chat:user_join', receiveNewUser);
+    socket.on('chat:user_leave', receiveDisconnectedUser);
 
     return () => {
       socket.off('chat:user_list', receiveAllUsers);
       socket.off('chat:user_join', receiveNewUser);
+      socket.off('chat:user_leave', receiveDisconnectedUser);
     };
-  }, [socket]);
+  });
 
   return (
     <div className={`is-full-height is-flex`}>

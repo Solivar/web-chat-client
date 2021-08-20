@@ -9,10 +9,10 @@ const UserList = ({ users }) => {
         <strong>Users ({users.length})</strong>
       </div>
       <ul>
-        {users.map(user => {
+        {users.map(name => {
           return (
-            <li key={user.name} className={styles.user}>
-              {user.name}
+            <li key={name} className={styles.user}>
+              {name}
             </li>
           );
         })}
