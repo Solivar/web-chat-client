@@ -5,7 +5,7 @@ import './App.scss';
 import ChatRoom from './views/ChatRoom';
 import Name from './views/Name';
 
-const socket = io.connect('http://localhost:8000');
+const socket = io.connect(process.env.REACT_APP_SERVER_ADDRESS);
 
 const App = () => {
   const [name, setName] = useState('');
