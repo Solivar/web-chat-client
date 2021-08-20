@@ -4,56 +4,31 @@ import MessageInput from '../components/MessageInput';
 import MessageList from '../components/MessageList';
 import UserList from '../components/UserList';
 
-import data from './chat-room.json';
 import * as styles from './ChatRoom.module.scss';
 
 const ChatRoom = ({ socket }) => {
-  const [users, setUsers] = useState([]);
-  const messages = data.messages;
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    socket.emit('chat:get_user_list');
-  }, [socket]);
+    const receiveNewMessage = message => {
+      setMessages(prevMessages => {
+        const newMessage = [...prevMessages];
+        newMessage.push(message);
 
-  useEffect(() => {
-    const receiveNewUser = userName => {
-      setUsers(prevUsers => {
-        const newUsers = [...prevUsers];
-        newUsers.push(userName);
-
-        return newUsers;
+        return newMessage;
       });
     };
 
-    const receiveAllUsers = allUsers => {
-      const newUsers = [...allUsers];
-
-      setUsers(newUsers);
-    };
-
-    const receiveDisconnectedUser = userName => {
-      setUsers(prevUsers => {
-        const newUsers = [...prevUsers];
-        const userIndex = newUsers.indexOf(userName);
-
-        console.log(prevUsers);
-
-        newUsers.splice(userIndex, 1);
-
-        return newUsers;
-      });
-    };
-
-    socket.on('chat:user_list', receiveAllUsers);
-    socket.on('chat:user_join', receiveNewUser);
-    socket.on('chat:user_leave', receiveDisconnectedUser);
+    socket.on('chat:message', receiveNewMessage);
 
     return () => {
-      socket.off('chat:user_list', receiveAllUsers);
-      socket.off('chat:user_join', receiveNewUser);
-      socket.off('chat:user_leave', receiveDisconnectedUser);
+      socket.off('chat:message', receiveNewMessage);
     };
   });
+
+  const onSendMessage = message => {
+    socket.emit('chat:send_message', message);
+  };
 
   return (
     <div className={`is-full-height is-flex`}>
@@ -63,12 +38,12 @@ const ChatRoom = ({ socket }) => {
         </div>
         <div className={styles.messageInput}>
           <div className="p-5">
-            <MessageInput />
+            <MessageInput sendMessage={onSendMessage} />
           </div>
         </div>
       </div>
       <div className={`p-5 ${styles.userList}`}>
-        <UserList users={users} />
+        <UserList socket={socket} />
       </div>
     </div>
   );
