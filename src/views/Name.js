@@ -59,7 +59,7 @@ const Name = ({ socket, updateName }) => {
         <div className="field">
           <div className="control">
             <button className="button is-primary">
-              <span className="is-uppercase has-text-weight-semibold">Submit</span>
+              <span className="is-uppercase has-text-weight-semibold">Start chatting</span>
               <span className="icon is-small  mt-1">
                 <i className="fas fa-paper-plane">
                   <FaArrowRight />

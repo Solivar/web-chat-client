@@ -6,9 +6,9 @@ const MessageList = ({ messages }) => {
   if (messages.length) {
     return (
       <ul>
-        {messages.map(message => {
+        {messages.map((message, index) => {
           return (
-            <li key={message.id} className="mb-3">
+            <li key={message.id} className={`${index === messages.length - 1 ? '' : 'mb-3'}`}>
               <Message message={message} />
             </li>
           );

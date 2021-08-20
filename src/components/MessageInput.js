@@ -24,7 +24,7 @@ const MessageInput = ({ sendMessage }) => {
             className="textarea"
             placeholder="Enter your message"
             rows="1"
-            style={{ height: '40px', padding: '0.25em 0.5em' }}
+            style={{ height: '40px', padding: '0.25em 0.5em', resize: 'none', overflow: 'hidden' }}
           />
         </div>
         <div className="control">

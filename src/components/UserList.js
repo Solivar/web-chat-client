@@ -20,9 +20,7 @@ const UserList = ({ socket }) => {
     };
 
     const receiveAllUsers = allUsers => {
-      const newUsers = [...allUsers];
-
-      setUsers(newUsers);
+      setUsers(allUsers);
     };
 
     const receiveDisconnectedUser = userName => {
