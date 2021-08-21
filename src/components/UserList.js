@@ -14,6 +14,7 @@ const UserList = ({ socket }) => {
       setUsers(prevUsers => {
         const newUsers = [...prevUsers];
         newUsers.push(userName);
+        newUsers.sort();
 
         return newUsers;
       });
