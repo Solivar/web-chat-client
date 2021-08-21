@@ -23,14 +23,28 @@ const MessageInput = ({ sendMessage }) => {
     sendMessage(message);
     setMessage('');
   };
+
+  const handleKeyPress = e => {
+    if (e.key === 'Enter') {
+      if (e.shiftKey) {
+        return;
+      }
+
+      e.preventDefault();
+
+      handleSubmit(e);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
-      <p className="help is-danger mt-0 mb-1">{error}</p>
+      <p className="help is-danger mt-0 mb-2">{error}</p>
       <div className="field is-grouped">
         <div className="control is-expanded">
           <textarea
             value={message}
             onChange={handleChange}
+            onKeyPress={handleKeyPress}
             className="textarea"
             placeholder="Enter your message"
             rows="1"
