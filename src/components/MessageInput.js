@@ -3,19 +3,29 @@ import { FaPaperPlane } from 'react-icons/fa';
 
 const MessageInput = ({ sendMessage }) => {
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = e => {
+    setError('');
     setMessage(e.target.value);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
+    setError('');
+
+    if (message.length < 1 || message.length > 100) {
+      setError('Message must be 1 - 100 characters long.');
+
+      return;
+    }
 
     sendMessage(message);
     setMessage('');
   };
   return (
     <form onSubmit={handleSubmit}>
+      <p className="help is-danger mt-0 mb-1">{error}</p>
       <div className="field is-grouped">
         <div className="control is-expanded">
           <textarea
