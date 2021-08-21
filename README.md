@@ -1,6 +1,6 @@
 # Web Chat App Client
 
-This is the server for a web chat application based on WebSocket protocol.
+This is the client for a web chat application based on WebSocket protocol.
 
 Visit the [following repository](https://github.com/Solivar/web-chat-server) to see server-side code.
 
