@@ -38,7 +38,7 @@ const Message = ({ message: { name, content, createdAt } }) => {
           {getMessageTime()}
         </span>
       </p>
-      <p>{content}</p>
+      <p style={{ whiteSpace: 'pre-line' }}>{content}</p>
     </div>
   );
 };
