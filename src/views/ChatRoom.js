@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import MessageInput from '../components/MessageInput';
 import MessageList from '../components/MessageList';
 import UserList from '../components/UserList';
+import UserTyping from '../components/UserTyping';
 
 import * as styles from './ChatRoom.module.scss';
 
@@ -69,8 +70,8 @@ const ChatRoom = ({ socket }) => {
 
   return (
     <div className={`is-full-height is-flex`}>
-      <div className="is-full-height is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1 is-relative">
-        <div className="px-5 pt-5" style={{ overflowY: 'auto' }}>
+      <div className="is-full-height is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1">
+        <div className={`${styles.messageList} is-relative`}>
           {error && (
             <div
               className="notification is-danger is-light"
@@ -85,12 +86,17 @@ const ChatRoom = ({ socket }) => {
               {error}
             </div>
           )}
-          <MessageList messages={messages} />
-          <div ref={messageListElementRef} className="pb-5" />
+
+          <div className="is-full-height px-5 pt-5" style={{ overflowY: 'auto' }}>
+            <MessageList messages={messages} />
+            <div ref={messageListElementRef} className="py-5" />
+          </div>
+          <UserTyping socket={socket} />
         </div>
+
         <div className={styles.messageInput}>
-          <div className="p-5">
-            <MessageInput sendMessage={onSendMessage} />
+          <div className="px-5 pb-5">
+            <MessageInput socket={socket} sendMessage={onSendMessage} />
           </div>
         </div>
       </div>

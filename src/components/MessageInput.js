@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 
-const MessageInput = ({ sendMessage }) => {
+const MessageInput = ({ socket, sendMessage }) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
   const handleChange = e => {
     setError('');
     setMessage(e.target.value);
+    socket.emit('chat:user_typing');
   };
 
   const handleSubmit = e => {
@@ -38,7 +39,9 @@ const MessageInput = ({ sendMessage }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <p className="help is-danger mt-0 mb-2">{error}</p>
+      <p className="help is-danger mb-2" style={{ height: '0.75rem' }}>
+        {error}
+      </p>
       <div className="field is-grouped">
         <div className="control is-expanded">
           <textarea
