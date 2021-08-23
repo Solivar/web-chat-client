@@ -1,37 +1,64 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const UserTyping = ({ socket }) => {
-  const [userTyping, setUserTyping] = useState(null);
+  const [users, setUsers] = useState([]);
+  const usersRef = useRef(users);
+  usersRef.current = users;
 
   useEffect(() => {
     const receiveUserTyping = name => {
-      setUserTyping(prevUserTyping => {
-        if (prevUserTyping && prevUserTyping.timeout) {
-          clearTimeout(prevUserTyping.timeout);
+      const newUsers = [...usersRef.current];
+      const userIndex = usersRef.current.findIndex(user => user.name === name);
+
+      const timeout = setTimeout(() => {
+        const newUsers = [...usersRef.current];
+        const userIndex = usersRef.current.findIndex(user => user.name === name);
+
+        if (userIndex > -1) {
+          newUsers.splice(userIndex, 1);
+          setUsers(newUsers);
         }
+      }, 1000 * 5);
 
-        const timeout = setTimeout(() => {
-          setUserTyping(null);
-        }, 1000 * 5);
+      if (userIndex > -1) {
+        clearTimeout(newUsers[userIndex].timeout);
 
-        return { name, timeout };
-      });
+        newUsers[userIndex].timeout = timeout;
+      } else {
+        newUsers.push({ name, timeout });
+      }
+
+      setUsers(newUsers);
+    };
+
+    const clearTimeouts = () => {
+      for (const user of usersRef.current) {
+        clearTimeout(user.timeout);
+      }
     };
 
     socket.on('chat:user_typing', receiveUserTyping);
 
     return () => {
       socket.off('chat:user_typing', receiveUserTyping);
+
+      clearTimeouts();
     };
   }, [socket]);
 
   const getUserTypingMessage = () => {
-    return `${userTyping.name} is typing`;
+    if (users.length > 2) {
+      return `${users.length} users are typing.`;
+    } else if (users.length > 1) {
+      return `${users[0].name} and ${users[1].name} are typing.`;
+    }
+
+    return `${users[0].name} is typing.`;
   };
 
   return (
     <>
-      {userTyping && (
+      {users.length > 0 && (
         <div
           style={{
             position: 'absolute',
