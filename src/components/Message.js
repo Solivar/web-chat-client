@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Message = ({ message: { name, content, createdAt } }) => {
+const Message = ({ message: { name, content, createdAt, isAnnouncement } }) => {
   const date = new Date(createdAt);
   const hours = date.getHours();
   const minutes = date.getMinutes();
@@ -29,6 +29,14 @@ const Message = ({ message: { name, content, createdAt } }) => {
       minute: '2-digit',
     });
   };
+
+  if (isAnnouncement) {
+    return (
+      <div className="has-text-grey">
+        <p>{content}</p>
+      </div>
+    );
+  }
 
   return (
     <div>

@@ -11,6 +11,8 @@ const ChatRoom = ({ socket }) => {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState('');
   const messageListElementRef = useRef(null);
+  const messagesRef = useRef(messages);
+  messages.current = messages;
 
   let timeout = useRef(null);
 
@@ -28,15 +30,15 @@ const ChatRoom = ({ socket }) => {
 
   useEffect(() => {
     const receiveNewMessage = message => {
-      setMessages(prevMessages => {
-        const newMessage = [...prevMessages];
-        newMessage.push(message);
+      const newMessages = [...messagesRef.current];
+      newMessages.push(message);
 
-        return newMessage;
-      });
+      messagesRef.current = newMessages;
+      setMessages(newMessages);
     };
 
     const receiveAllMessages = allMessages => {
+      messagesRef.current = allMessages;
       setMessages(allMessages);
     };
 
@@ -66,6 +68,15 @@ const ChatRoom = ({ socket }) => {
 
   const onSendMessage = message => {
     socket.emit('chat:send_message', message);
+  };
+
+  const onUserJoin = name => {
+    const newMessages = [...messagesRef.current];
+
+    messagesRef.current = newMessages;
+    newMessages.push({ id: name, isAnnouncement: true, content: `${name} has joined.` });
+
+    setMessages(newMessages);
   };
 
   return (
@@ -101,7 +112,7 @@ const ChatRoom = ({ socket }) => {
         </div>
       </div>
       <div className={`p-5 ${styles.userList}`}>
-        <UserList socket={socket} />
+        <UserList socket={socket} handleUserJoin={onUserJoin} />
       </div>
     </div>
   );

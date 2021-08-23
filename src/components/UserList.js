@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import * as styles from './UserList.module.scss';
 
-const UserList = ({ socket }) => {
+const UserList = ({ socket, handleUserJoin }) => {
   const [users, setUsers] = useState([]);
+  const usersRef = useRef(users);
+  usersRef.current = users;
+
+  const handleUserJoinRef = useRef(handleUserJoin);
+  handleUserJoinRef.current = handleUserJoin;
 
   useEffect(() => {
     socket.emit('chat:get_user_list');
@@ -11,13 +16,14 @@ const UserList = ({ socket }) => {
 
   useEffect(() => {
     const receiveNewUser = userName => {
-      setUsers(prevUsers => {
-        const newUsers = [...prevUsers];
-        newUsers.push(userName);
-        newUsers.sort();
+      const newUsers = [...usersRef.current];
+      newUsers.push(userName);
+      newUsers.sort();
 
-        return newUsers;
-      });
+      handleUserJoinRef.current(userName);
+
+      usersRef.current = newUsers;
+      setUsers(newUsers);
     };
 
     const receiveAllUsers = allUsers => {
@@ -25,14 +31,11 @@ const UserList = ({ socket }) => {
     };
 
     const receiveDisconnectedUser = userName => {
-      setUsers(prevUsers => {
-        const newUsers = [...prevUsers];
-        const userIndex = newUsers.indexOf(userName);
+      const newUsers = [...usersRef.current];
+      const userIndex = newUsers.indexOf(userName);
 
-        newUsers.splice(userIndex, 1);
-
-        return newUsers;
-      });
+      newUsers.splice(userIndex, 1);
+      setUsers(newUsers);
     };
 
     socket.on('chat:user_list', receiveAllUsers);
@@ -44,7 +47,7 @@ const UserList = ({ socket }) => {
       socket.off('chat:user_join', receiveNewUser);
       socket.off('chat:user_leave', receiveDisconnectedUser);
     };
-  });
+  }, [socket]);
 
   return (
     <div className={styles.list}>
