@@ -52,6 +52,7 @@ const Name = ({ socket, updateName }) => {
               placeholder="Enter your name"
               value={name}
               onChange={handleChange}
+              autoFocus
             />
           </div>
           <p className="help is-danger">{error}</p>
