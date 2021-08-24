@@ -49,6 +49,7 @@ const MessageInput = ({ children, socket, sendMessage, adjustHeight }) => {
     setMessage(prevMessage => {
       return `${prevMessage}${emoji.native}`;
     });
+    socket.emit('chat:user_typing');
   };
 
   return (
