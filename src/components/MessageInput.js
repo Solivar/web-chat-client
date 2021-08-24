@@ -91,6 +91,7 @@ const MessageInput = ({ children, socket, sendMessage, adjustHeight }) => {
                   overflow: 'hidden',
                   borderRadius: '9999px',
                 }}
+                autoFocus
               />
             </div>
             <div className="control">
