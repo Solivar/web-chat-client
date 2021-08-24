@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
-import { FaPaperPlane } from 'react-icons/fa';
+import React, { useEffect, useRef, useState } from 'react';
+import { FaPaperPlane, FaRegSmile } from 'react-icons/fa';
 
-const MessageInput = ({ socket, sendMessage }) => {
+import EmojiPicker from './EmojiPicker';
+
+const MessageInput = ({ socket, sendMessage, adjustHeight }) => {
   const [message, setMessage] = useState('');
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [error, setError] = useState('');
+  const messageInputRef = useRef(null);
+
+  useEffect(() => {
+    adjustHeight(messageInputRef.current.clientHeight);
+  }, [adjustHeight, isEmojiPickerOpen]);
 
   const handleChange = e => {
     setError('');
@@ -37,29 +45,53 @@ const MessageInput = ({ socket, sendMessage }) => {
     }
   };
 
+  const onAddEmoji = emoji => {
+    setMessage(prevMessage => {
+      return `${prevMessage}${emoji.native}`;
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <p className="help is-danger mb-2" style={{ height: '0.75rem' }}>
+    <form ref={messageInputRef} onSubmit={handleSubmit}>
+      <EmojiPicker handleEmoji={onAddEmoji} isOpen={isEmojiPickerOpen} />
+      <p className="help is-danger mt-0 mb-0" style={{ height: '1.25rem' }}>
         {error}
       </p>
       <div className="field is-grouped">
+        <div className="control">
+          <button
+            type="button"
+            className="button is-outlined is-rounded"
+            onClick={() => {
+              setIsEmojiPickerOpen(prevState => !prevState);
+            }}
+          >
+            <span className="icon is-small">
+              <FaRegSmile />
+            </span>
+          </button>
+        </div>
         <div className="control is-expanded">
           <textarea
             value={message}
             onChange={handleChange}
             onKeyPress={handleKeyPress}
-            className="textarea"
+            className={`textarea ${error ? 'is-danger' : ''}`}
             placeholder="Enter your message"
             rows="1"
-            style={{ height: '40px', padding: '0.25em 0.5em', resize: 'none', overflow: 'hidden' }}
+            style={{
+              height: '40px',
+              padding: '0.3em 1em',
+              resize: 'none',
+              overflow: 'hidden',
+              borderRadius: '9999px',
+            }}
           />
         </div>
         <div className="control">
-          <button type="submit" className="button is-primary">
+          <button type="submit" className="button is-primary is-rounded">
             <span className="icon is-small">
-              <i className="fas fa-paper-plane">
-                <FaPaperPlane />
-              </i>
+              <FaPaperPlane />
             </span>
           </button>
         </div>

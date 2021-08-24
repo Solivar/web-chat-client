@@ -14,6 +14,8 @@ const ChatRoom = ({ socket }) => {
   const messagesRef = useRef(messages);
   messages.current = messages;
 
+  const [messageInputHeight, setMessageInputHeight] = useState(0);
+
   let timeout = useRef(null);
 
   useEffect(() => {
@@ -79,10 +81,17 @@ const ChatRoom = ({ socket }) => {
     setMessages(newMessages);
   };
 
+  const onAdjustHeight = height => {
+    setMessageInputHeight(height);
+  };
+
   return (
     <div className={`is-full-height is-flex`}>
       <div className="is-full-height is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1">
-        <div className={`${styles.messageList} is-relative`}>
+        <div
+          style={{ height: `calc(100% - 89px - ${messageInputHeight}px)` }}
+          className="is-relative"
+        >
           {error && (
             <div
               className="notification is-danger is-light"
@@ -106,8 +115,12 @@ const ChatRoom = ({ socket }) => {
         </div>
 
         <div className={styles.messageInput}>
-          <div className="px-5 pb-5">
-            <MessageInput socket={socket} sendMessage={onSendMessage} />
+          <div className="px-5 pt-1 pb-5">
+            <MessageInput
+              socket={socket}
+              sendMessage={onSendMessage}
+              adjustHeight={onAdjustHeight}
+            />
           </div>
         </div>
       </div>

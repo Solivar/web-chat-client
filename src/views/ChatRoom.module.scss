@@ -1,5 +1,5 @@
 .messageList {
-  height: calc(100% - 89px);
+  height: calc(100% - 94px);
 }
 
 .messageInput {
@@ -8,5 +8,5 @@
 
 .userList {
   border-left: 1px solid #dbdbdb;
-  width: 200px;
+  min-width: 200px;
 }
