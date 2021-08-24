@@ -59,14 +59,7 @@ const UserTyping = ({ socket }) => {
   return (
     <>
       {users.length > 0 && (
-        <div
-          style={{
-            position: 'absolute',
-            width: '100%',
-            bottom: 0,
-          }}
-          className="has-background-light has-text-grey is-size-7 px-5 py-1"
-        >
+        <div className="has-background-light has-text-grey is-size-7 px-5 py-1">
           {getUserTypingMessage()}
         </div>
       )}

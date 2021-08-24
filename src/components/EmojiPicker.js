@@ -10,7 +10,11 @@ const EmojiPicker = ({ handleEmoji, isOpen }) => {
 
   return (
     <div
-      style={isOpen ? { height: 'auto', margin: '0.75rem 0' } : { height: 0, overflow: 'hidden' }}
+      style={
+        isOpen
+          ? { height: 'auto', padding: '0.75rem 0', boxSizing: 'border-box' }
+          : { height: 0, overflow: 'hidden' }
+      }
     >
       <Picker onSelect={addEmoji} color="#00D1B2" showPreview={false} title="" />
     </div>

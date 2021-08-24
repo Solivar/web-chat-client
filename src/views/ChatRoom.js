@@ -89,7 +89,7 @@ const ChatRoom = ({ socket }) => {
     <div className={`is-full-height is-flex`}>
       <div className="is-full-height is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1">
         <div
-          style={{ height: `calc(100% - 89px - ${messageInputHeight}px)` }}
+          style={{ height: `calc(100% - 115px - ${messageInputHeight}px)` }}
           className="is-relative"
         >
           {error && (
@@ -109,20 +109,13 @@ const ChatRoom = ({ socket }) => {
 
           <div className="is-full-height px-5 pt-5" style={{ overflowY: 'auto' }}>
             <MessageList messages={messages} />
-            <div ref={messageListElementRef} className="py-5" />
+            <div ref={messageListElementRef} />
           </div>
-          <UserTyping socket={socket} />
         </div>
 
-        <div className={styles.messageInput}>
-          <div className="px-5 pt-1 pb-5">
-            <MessageInput
-              socket={socket}
-              sendMessage={onSendMessage}
-              adjustHeight={onAdjustHeight}
-            />
-          </div>
-        </div>
+        <MessageInput socket={socket} sendMessage={onSendMessage} adjustHeight={onAdjustHeight}>
+          <UserTyping socket={socket} />
+        </MessageInput>
       </div>
       <div className={`p-5 ${styles.userList}`}>
         <UserList socket={socket} handleUserJoin={onUserJoin} />

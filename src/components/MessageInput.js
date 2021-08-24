@@ -3,7 +3,7 @@ import { FaPaperPlane, FaRegSmile } from 'react-icons/fa';
 
 import EmojiPicker from './EmojiPicker';
 
-const MessageInput = ({ socket, sendMessage, adjustHeight }) => {
+const MessageInput = ({ children, socket, sendMessage, adjustHeight }) => {
   const [message, setMessage] = useState('');
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [error, setError] = useState('');
@@ -52,51 +52,58 @@ const MessageInput = ({ socket, sendMessage, adjustHeight }) => {
   };
 
   return (
-    <form ref={messageInputRef} onSubmit={handleSubmit}>
-      <EmojiPicker handleEmoji={onAddEmoji} isOpen={isEmojiPickerOpen} />
-      <p className="help is-danger mt-0 mb-0" style={{ height: '1.25rem' }}>
-        {error}
-      </p>
-      <div className="field is-grouped">
-        <div className="control">
-          <button
-            type="button"
-            className="button is-outlined is-rounded"
-            onClick={() => {
-              setIsEmojiPickerOpen(prevState => !prevState);
-            }}
-          >
-            <span className="icon is-small">
-              <FaRegSmile />
-            </span>
-          </button>
-        </div>
-        <div className="control is-expanded">
-          <textarea
-            value={message}
-            onChange={handleChange}
-            onKeyPress={handleKeyPress}
-            className={`textarea ${error ? 'is-danger' : ''}`}
-            placeholder="Enter your message"
-            rows="1"
-            style={{
-              height: '40px',
-              padding: '0.3em 1em',
-              resize: 'none',
-              overflow: 'hidden',
-              borderRadius: '9999px',
-            }}
-          />
-        </div>
-        <div className="control">
-          <button type="submit" className="button is-primary is-rounded">
-            <span className="icon is-small">
-              <FaPaperPlane />
-            </span>
-          </button>
-        </div>
+    <div>
+      {children}
+      <div className="px-5 pt-1 pb-5" style={{ borderTop: '1px solid #dbdbdb' }}>
+        <form onSubmit={handleSubmit}>
+          <div ref={messageInputRef}>
+            <EmojiPicker handleEmoji={onAddEmoji} isOpen={isEmojiPickerOpen} />
+          </div>
+          <p className="help is-danger mt-0 mb-0" style={{ height: '1.25rem' }}>
+            {error}
+          </p>
+          <div className="field is-grouped">
+            <div className="control">
+              <button
+                type="button"
+                className="button is-outlined is-rounded"
+                onClick={() => {
+                  setIsEmojiPickerOpen(prevState => !prevState);
+                }}
+              >
+                <span className="icon is-small">
+                  <FaRegSmile />
+                </span>
+              </button>
+            </div>
+            <div className="control is-expanded">
+              <textarea
+                value={message}
+                onChange={handleChange}
+                onKeyPress={handleKeyPress}
+                className={`textarea ${error ? 'is-danger' : ''}`}
+                placeholder="Enter your message"
+                rows="1"
+                style={{
+                  height: '40px',
+                  padding: '0.3em 1em',
+                  resize: 'none',
+                  overflow: 'hidden',
+                  borderRadius: '9999px',
+                }}
+              />
+            </div>
+            <div className="control">
+              <button type="submit" className="button is-primary is-rounded">
+                <span className="icon is-small">
+                  <FaPaperPlane />
+                </span>
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
 
