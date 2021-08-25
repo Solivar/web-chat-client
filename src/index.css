@@ -3,29 +3,3 @@ body,
 #root {
   height: 100%;
 }
-
-.is-full-height {
-  height: 100%;
-}
-
-.emoji-mart button,
-.emoji-mart button span,
-.emoji-mart-skin-swatch {
-  cursor: pointer !important;
-}
-
-.emoji-mart {
-  width: 100% !important;
-}
-
-.emoji-mart-scroll {
-  height: 150px;
-}
-
-.emoji-mart-preview {
-  height: 30px;
-}
-
-.emoji-mart-preview .emoji-mart-preview-emoji {
-  display: none;
-}

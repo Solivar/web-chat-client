@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 
 import './App.scss';
 import ChatRoom from './views/ChatRoom';
-import Name from './views/Name';
+import NameSetup from './views/NameSetup';
 
 const socket = io.connect(process.env.REACT_APP_SERVER_ADDRESS);
 
@@ -17,15 +17,10 @@ const App = () => {
   return (
     <div className="container is-max-widescreen is-full-height">
       <section className="section is-full-height">
-        {!name && (
-          <div className="is-full-height is-flex is-justify-content-center is-align-items-center">
-            <Name socket={socket} updateName={onUpdateName} />
-          </div>
-        )}
-        {name && (
-          <div className="is-full-height App box p-0">
-            <ChatRoom socket={socket} />
-          </div>
+        {name ? (
+          <ChatRoom socket={socket} />
+        ) : (
+          <NameSetup socket={socket} updateName={onUpdateName} />
         )}
       </section>
     </div>

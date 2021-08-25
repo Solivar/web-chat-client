@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 
-import MessageInput from '../components/MessageInput';
-import MessageList from '../components/MessageList';
-import UserList from '../components/UserList';
-import UserTyping from '../components/UserTyping';
+import MessageInput from '../components/message/MessageInput';
+import MessageList from '../components/message/MessageList';
+import UserList from '../components/user/UserList';
+import UserTyping from '../components/user/UserTyping';
 
 import * as styles from './ChatRoom.module.scss';
 
@@ -19,11 +19,13 @@ const ChatRoom = ({ socket }) => {
   let timeout = useRef(null);
 
   useEffect(() => {
-    messageListElementRef.current.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-      inline: 'nearest',
-    });
+    if (messageListElementRef.current) {
+      messageListElementRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
+      });
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -86,39 +88,40 @@ const ChatRoom = ({ socket }) => {
   };
 
   return (
-    <div className={`is-full-height is-flex`}>
-      <div className="is-full-height is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1">
-        <div
-          style={{ height: `calc(100% - 115px - ${messageInputHeight}px)` }}
-          className="is-relative"
-        >
-          {error && (
-            <div
-              className="notification is-danger is-light"
-              style={{
-                position: 'absolute',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: '50%',
-              }}
-            >
-              <button className="delete" onClick={closeError}></button>
-              {error}
+    <div className="is-full-height box p-0" style={{ border: '1px solid #dbdbdb' }}>
+      <div className={`is-full-height is-flex`}>
+        <div className="is-full-height is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1">
+          <div
+            style={{ height: `calc(100% - 115px - ${messageInputHeight}px)` }}
+            className="is-relative"
+          >
+            {error && (
+              <div
+                className="notification is-danger is-light"
+                style={{
+                  position: 'absolute',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: '50%',
+                }}
+              >
+                <button className="delete" onClick={closeError}></button>
+                {error}
+              </div>
+            )}
+
+            <div className="is-full-height px-5 pt-5" style={{ overflowY: 'auto' }}>
+              <MessageList messages={messages} bottomOfMessageListRef={messageListElementRef} />
             </div>
-          )}
-
-          <div className="is-full-height px-5 pt-5" style={{ overflowY: 'auto' }}>
-            <MessageList messages={messages} />
-            <div ref={messageListElementRef} />
           </div>
-        </div>
 
-        <MessageInput socket={socket} sendMessage={onSendMessage} adjustHeight={onAdjustHeight}>
-          <UserTyping socket={socket} />
-        </MessageInput>
-      </div>
-      <div className={`p-5 ${styles.userList}`}>
-        <UserList socket={socket} handleUserJoin={onUserJoin} />
+          <MessageInput socket={socket} sendMessage={onSendMessage} adjustHeight={onAdjustHeight}>
+            <UserTyping socket={socket} />
+          </MessageInput>
+        </div>
+        <div className={`p-5 ${styles.userList}`}>
+          <UserList socket={socket} handleUserJoin={onUserJoin} />
+        </div>
       </div>
     </div>
   );
