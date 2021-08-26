@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-const UserTyping = ({ socket }) => {
+import { SocketContext } from '../../context/socket';
+
+const UserTyping = () => {
+  const socket = useContext(SocketContext);
   const [users, setUsers] = useState([]);
   const usersRef = useRef(users);
   usersRef.current = users;

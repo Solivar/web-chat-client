@@ -10,11 +10,7 @@ const MessageList = ({ messages, bottomOfMessageListRef }) => {
           {messages.map((message, index) => {
             if (index === messages.length - 1) {
               return (
-                <li
-                  className={`${index === messages.length - 1 ? '' : 'mb-3'}`}
-                  key={message.id}
-                  ref={bottomOfMessageListRef}
-                >
+                <li key={message.id} ref={bottomOfMessageListRef}>
                   <Message message={message} />
                 </li>
               );

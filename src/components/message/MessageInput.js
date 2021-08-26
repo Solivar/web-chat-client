@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { FaPaperPlane, FaRegSmile } from 'react-icons/fa';
 
 import EmojiPicker from './EmojiPicker';
 
-const MessageInput = ({ children, socket, sendMessage, adjustHeight }) => {
+import { SocketContext } from '../../context/socket';
+
+const MessageInput = ({ children, sendMessage, adjustHeight }) => {
+  const socket = useContext(SocketContext);
   const [message, setMessage] = useState('');
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [error, setError] = useState('');
@@ -49,6 +52,7 @@ const MessageInput = ({ children, socket, sendMessage, adjustHeight }) => {
     setMessage(prevMessage => {
       return `${prevMessage}${emoji.native}`;
     });
+
     socket.emit('chat:user_typing');
   };
 

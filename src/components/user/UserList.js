@@ -1,8 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { FaCircle } from 'react-icons/fa';
 
 import * as styles from './UserList.module.scss';
+import { SocketContext } from '../../context/socket';
 
-const UserList = ({ socket, handleUserJoin }) => {
+const UserList = ({ handleUserJoin }) => {
+  const socket = useContext(SocketContext);
   const [users, setUsers] = useState([]);
   const usersRef = useRef(users);
   usersRef.current = users;
@@ -22,7 +25,6 @@ const UserList = ({ socket, handleUserJoin }) => {
 
       handleUserJoinRef.current(userName);
 
-      usersRef.current = newUsers;
       setUsers(newUsers);
     };
 
@@ -52,7 +54,14 @@ const UserList = ({ socket, handleUserJoin }) => {
   return (
     <div className={styles.list}>
       <div>
-        <strong>Users ({users.length})</strong>
+        <strong>
+          <span className="icon-text is-align-items-center">
+            <span className="icon is-small mr-1">
+              <FaCircle style={{ color: '#4fcc49' }} />
+            </span>
+            Online users ({users.length})
+          </span>
+        </strong>
       </div>
       <ul>
         {users.map(name => {

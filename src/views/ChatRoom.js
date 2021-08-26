@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 
+import * as styles from './ChatRoom.module.scss';
+import { SocketContext } from '../context/socket';
 import MessageInput from '../components/message/MessageInput';
 import MessageList from '../components/message/MessageList';
 import UserList from '../components/user/UserList';
 import UserTyping from '../components/user/UserTyping';
 
-import * as styles from './ChatRoom.module.scss';
-
-const ChatRoom = ({ socket }) => {
+const ChatRoom = () => {
+  const socket = useContext(SocketContext);
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState('');
   const messageListElementRef = useRef(null);
@@ -62,6 +63,7 @@ const ChatRoom = ({ socket }) => {
       socket.off('chat:message', receiveNewMessage);
       socket.off('chat:message_list', receiveAllMessages);
       socket.off('chat:error', handleError);
+      clearTimeout(timeout.current);
     };
   }, [socket]);
 
@@ -115,12 +117,12 @@ const ChatRoom = ({ socket }) => {
             </div>
           </div>
 
-          <MessageInput socket={socket} sendMessage={onSendMessage} adjustHeight={onAdjustHeight}>
-            <UserTyping socket={socket} />
+          <MessageInput sendMessage={onSendMessage} adjustHeight={onAdjustHeight}>
+            <UserTyping />
           </MessageInput>
         </div>
         <div className={`p-5 ${styles.userList}`}>
-          <UserList socket={socket} handleUserJoin={onUserJoin} />
+          <UserList handleUserJoin={onUserJoin} />
         </div>
       </div>
     </div>

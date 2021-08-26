@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import io from 'socket.io-client';
 
 import './App.scss';
+import { socket, SocketContext } from './context/socket';
 import ChatRoom from './views/ChatRoom';
 import NameSetup from './views/NameSetup';
-
-const socket = io.connect(process.env.REACT_APP_SERVER_ADDRESS);
 
 const App = () => {
   const [name, setName] = useState('');
@@ -17,11 +15,9 @@ const App = () => {
   return (
     <div className="container is-max-widescreen is-full-height">
       <section className="section is-full-height">
-        {name ? (
-          <ChatRoom socket={socket} />
-        ) : (
-          <NameSetup socket={socket} updateName={onUpdateName} />
-        )}
+        <SocketContext.Provider value={socket}>
+          {name ? <ChatRoom /> : <NameSetup updateName={onUpdateName} />}
+        </SocketContext.Provider>
       </section>
     </div>
   );

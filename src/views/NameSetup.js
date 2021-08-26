@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import * as styles from './NameSetup.module.scss';
-
 import { FaArrowRight } from 'react-icons/fa';
+import { SocketContext } from '../context/socket';
 
-const Name = ({ socket, updateName }) => {
+const NameSetup = ({ updateName }) => {
+  const socket = useContext(SocketContext);
+
   const [name, setName] = useState('');
   const [error, setError] = useState('');
 
@@ -74,4 +76,4 @@ const Name = ({ socket, updateName }) => {
   );
 };
 
-export default Name;
+export default NameSetup;
