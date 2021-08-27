@@ -55,11 +55,11 @@ const UserList = ({ handleUserJoin }) => {
     <div className={styles.list}>
       <div>
         <strong>
-          <span className="icon-text is-align-items-center">
-            <span className="icon is-small mr-1">
+          <span className="icon-text">
+            <span className="icon is-size-7">
               <FaCircle style={{ color: '#4fcc49' }} />
             </span>
-            Online users ({users.length})
+            <span>Users online ({users.length})</span>
           </span>
         </strong>
       </div>

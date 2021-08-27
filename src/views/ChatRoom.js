@@ -4,6 +4,7 @@ import * as styles from './ChatRoom.module.scss';
 import { SocketContext } from '../context/socket';
 import MessageInput from '../components/message/MessageInput';
 import MessageList from '../components/message/MessageList';
+import Notification from '../components/Notification';
 import UserList from '../components/user/UserList';
 import UserTyping from '../components/user/UserTyping';
 
@@ -49,6 +50,10 @@ const ChatRoom = () => {
 
     const handleError = error => {
       setError(error);
+
+      if (timeout) {
+        clearTimeout(timeout);
+      }
 
       timeout.current = setTimeout(() => {
         setError('');
@@ -97,20 +102,7 @@ const ChatRoom = () => {
             style={{ height: `calc(100% - 115px - ${messageInputHeight}px)` }}
             className="is-relative"
           >
-            {error && (
-              <div
-                className="notification is-danger is-light"
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '50%',
-                }}
-              >
-                <button className="delete" onClick={closeError}></button>
-                {error}
-              </div>
-            )}
+            {error && <Notification error={error} closeError={closeError} />}
 
             <div className="is-full-height px-5 pt-5" style={{ overflowY: 'auto' }}>
               <MessageList messages={messages} bottomOfMessageListRef={messageListElementRef} />
