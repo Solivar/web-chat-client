@@ -57,11 +57,11 @@ const MessageInput = ({ children, sendMessage, adjustHeight }) => {
   };
 
   return (
-    <div>
+    <div ref={messageInputRef}>
       {children}
       <div className="px-5 pt-1 pb-5" style={{ borderTop: '1px solid #dbdbdb' }}>
         <form onSubmit={handleSubmit}>
-          <div ref={messageInputRef}>
+          <div>
             <EmojiPicker handleEmoji={onAddEmoji} isOpen={isEmojiPickerOpen} />
           </div>
           <p className="help is-danger mt-0 mb-0" style={{ height: '1.25rem' }}>

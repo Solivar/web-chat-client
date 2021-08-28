@@ -60,13 +60,13 @@ const UserTyping = () => {
   };
 
   return (
-    <>
+    <div style={{ height: '26px' }}>
       {users.length > 0 && (
         <div className="has-background-light has-text-grey is-size-7 px-5 py-1">
           {getUserTypingMessage()}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

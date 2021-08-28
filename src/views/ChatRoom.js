@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useState, useRef } from 'react';
 
 import * as styles from './ChatRoom.module.scss';
 import { SocketContext } from '../context/socket';
@@ -20,7 +20,7 @@ const ChatRoom = () => {
 
   let timeout = useRef(null);
 
-  useEffect(() => {
+  const scrollDown = useCallback(() => {
     if (messageListElementRef.current) {
       messageListElementRef.current.scrollIntoView({
         behavior: 'smooth',
@@ -28,7 +28,11 @@ const ChatRoom = () => {
         inline: 'nearest',
       });
     }
-  }, [messages]);
+  }, []);
+
+  useEffect(() => {
+    scrollDown();
+  }, [messages, scrollDown]);
 
   useEffect(() => {
     socket.emit('chat:get_message_list');
@@ -51,8 +55,9 @@ const ChatRoom = () => {
     const handleError = error => {
       setError(error);
 
-      if (timeout) {
-        clearTimeout(timeout);
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+        timeout.current = null;
       }
 
       timeout.current = setTimeout(() => {
@@ -75,6 +80,7 @@ const ChatRoom = () => {
   const closeError = () => {
     setError('');
     clearTimeout(timeout.current);
+    timeout.current = null;
   };
 
   const onSendMessage = message => {
@@ -92,16 +98,14 @@ const ChatRoom = () => {
 
   const onAdjustHeight = height => {
     setMessageInputHeight(height);
+    scrollDown();
   };
 
   return (
     <div className="is-full-height box p-0" style={{ border: '1px solid #dbdbdb' }}>
       <div className={`is-full-height is-flex`}>
         <div className="is-full-height is-flex is-flex-direction-column is-justify-content-space-between is-flex-grow-1">
-          <div
-            style={{ height: `calc(100% - 115px - ${messageInputHeight}px)` }}
-            className="is-relative"
-          >
+          <div style={{ height: `calc(100% - ${messageInputHeight}px)` }} className="is-relative">
             {error && <Notification error={error} closeError={closeError} />}
 
             <div className="is-full-height px-5 pt-5" style={{ overflowY: 'auto' }}>
